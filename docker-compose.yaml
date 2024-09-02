@@ -1,13 +1,17 @@
+version: '3.8'
+
 services:
   rabbitmq:
     image: rabbitmq:3-management
     ports:
-      - "5672:5672" 
+      - "5672:5672"
       - "15672:15672"
     environment:
       RABBITMQ_DEFAULT_USER: user
       RABBITMQ_DEFAULT_PASS: password
-  
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
   joke_service:
     build:
       context: .
@@ -16,6 +20,12 @@ services:
       - "8000:8000"
     depends_on:
       - rabbitmq
+      - postgres
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_USER: postgres_user
+      POSTGRES_PASSWORD: postgres_password
+      POSTGRES_DB: http_call_records
 
   queue_consumer:
     build:
@@ -25,3 +35,24 @@ services:
       - "7000:7000"
     depends_on:
       - rabbitmq
+      - postgres
+    environment:
+      POSTGRES_HOST: postgres
+      POSTGRES_USER: postgres_user
+      POSTGRES_PASSWORD: postgres_password
+      POSTGRES_DB: joke_db
+
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: postgres_user
+      POSTGRES_PASSWORD: postgres_password
+      POSTGRES_DB: joke_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  rabbitmq_data:
+  postgres_data:

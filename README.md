@@ -41,10 +41,6 @@ To run the service tests
 To run the service you can use this command
 `uvicorn joke_service.main:app`
 
-#### Use docker
-To use this app inside a docker container
-run the following commands (assuming you have a docker runtime up and running)
-
-`docker build -f joke_service/joke_service.Dockerfile -t <your_docker_name> `
-
-`docker run <your_docker_name>`
+#### Run all with docker-compose
+To use docker-compose to run the application, you can use this command
+`docker-compose up --build -d`
