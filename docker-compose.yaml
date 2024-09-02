@@ -1,0 +1,7 @@
+services:
+  joke_service:
+    build:
+      context: .
+      dockerfile: joke_service/joke_service.Dockerfile
+    ports:
+      - "8000:8000"
