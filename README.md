@@ -29,11 +29,11 @@ The project is under the `joke-service` folder.
 First create virtualenv and activate it
 
 #### Installation
-`pip install -r /path/to/requirements.txt`
+`pip install -r requirements.txt`
 
 #### Run tests
 To run the service tests
-`pytest`
+`py -m pytest`
 
 #### Run the server
 To run the service you can use this command
