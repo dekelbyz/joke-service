@@ -2,8 +2,8 @@ import json
 from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi.responses import JSONResponse
 
-file = open('../accounts.json');
-accounts = json.load(file);
+file = open('../accounts.json')
+accounts = json.load(file)
 class Auth(BaseHTTPMiddleware):
     async def dispatch(self, request, call_next):
         if request.headers.get('authorization') not in accounts: 
