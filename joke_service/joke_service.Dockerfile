@@ -12,6 +12,6 @@ COPY joke_service/ /app/joke_service/
 
 EXPOSE 8000
 
-CMD ["uvicorn", "joke_service.main:app"]
+CMD ["uvicorn", "joke_service.main:app", "--host", "0.0.0.0", "--port", "8000"]
 
 
