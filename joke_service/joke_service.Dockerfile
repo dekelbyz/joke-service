@@ -1,12 +1,14 @@
 FROM python:3.11-slim
 
-WORKDIR /joke_service
+WORKDIR /app/
 
-COPY joke_service/requirements.txt /joke_service/
+COPY joke_service/requirements.txt /app/
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-COPY . /joke_service/
+COPY accounts.json /app/
+
+COPY joke_service/ /app/joke_service/
 
 EXPOSE 8000
 
