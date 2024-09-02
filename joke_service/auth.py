@@ -2,7 +2,7 @@ import json
 from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi.responses import JSONResponse
 
-file = open('../accounts.json')
+file = open('accounts.json')
 accounts = json.load(file)
 class Auth(BaseHTTPMiddleware):
     async def dispatch(self, request, call_next):

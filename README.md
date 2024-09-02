@@ -31,13 +31,10 @@ First create virtualenv and activate it
 #### Installation
 `pip install -r requirements.txt`
 
-#### Navigate to project dir
-`cd joke-service`
-
 #### Run tests
 To run the service tests
 `py -m pytest`
 
 #### Run the server
 To run the service you can use this command
-`uvicorn main:app`
+`uvicorn joke_service.main:app`

@@ -1,7 +1,7 @@
 import requests
 from fastapi import FastAPI
-from auth import Auth
-from joke import Joke
+from joke_service.auth import Auth
+from joke_service.joke import Joke
 app = FastAPI()
 
 @app.get("/joke")
