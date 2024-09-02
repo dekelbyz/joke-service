@@ -1,0 +1,17 @@
+FROM python:3.11-slim
+
+WORKDIR /app/
+
+COPY queue_consumer/requirements.txt /app/
+
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY accounts.json /app/
+
+COPY queue_consumer/ /app/queue_consumer/
+
+EXPOSE 8000
+
+CMD ["python", "queue_consumer/main.py"]
+
+
