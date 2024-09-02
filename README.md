@@ -25,15 +25,16 @@ curl --location --request GET 'http://localhost:8000/joke' \
 --header 'Authorization: 1111-2222-3333'
 ```
 *******
-The project is under the `joke-service` folder.
-First create virtualenv and activate it
+
+The project is under the `joke_service` folder.
+First create virtualenv inside the folder and activate it
 
 #### Installation
-`pip install -r requirements.txt`
+`pip install -r joke_service/requirements.txt && pip install -r joke_service/dev-requirements.txt`
 
 #### Run tests
 To run the service tests
-`py -m pytest`
+`python3 -m pytest`
 
 
 #### Run the server
@@ -44,6 +45,6 @@ To run the service you can use this command
 To use this app inside a docker container
 run the following commands (assuming you have a docker runtime up and running)
 
-`docker build -t <your_docker_name> .`
+`docker build -f joke_service/joke_service.Dockerfile -t <your_docker_name> `
 
 `docker run <your_docker_name>`
