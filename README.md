@@ -35,6 +35,15 @@ First create virtualenv and activate it
 To run the service tests
 `py -m pytest`
 
+
 #### Run the server
 To run the service you can use this command
 `uvicorn joke_service.main:app`
+
+#### Use docker
+To use this app inside a docker container
+run the following commands (assuming you have a docker runtime up and running)
+
+`docker build -t <your_docker_name> .`
+
+`docker run <your_docker_name>`

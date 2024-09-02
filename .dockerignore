@@ -1,0 +1,66 @@
+# Ignore Python bytecode files
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Ignore logs and temporary files
+*.log
+*.out
+*.tmp
+
+# Ignore virtual environments
+venv/
+env/
+.venv/
+.pyenv/
+
+# Ignore distribution/build directories
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Ignore test and coverage files
+tests/
+test_*.py
+.coverage
+*.cover
+.hypothesis/
+.tox/
+.nox/
+pytest_cache/
+htmlcov/
+pytest.ini
+README.md
+
+# Ignore IDE/editor specific files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Ignore Dockerfile and docker-compose files (if not needed inside the container)
+Dockerfile
+docker-compose.yml
+
+# Ignore environment variables files
+.env
+.env.*
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore any personal config files
+*.iml
+*.ipr
+*.iws
+
+# Ignore Git repository files
+.git/
+.gitignore
+
+# Ignore any files related to CI/CD pipelines
+.gitlab-ci.yml
+.circleci/
+.github/
