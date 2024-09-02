@@ -31,6 +31,9 @@ First create virtualenv and activate it
 #### Installation
 `pip install -r requirements.txt`
 
+#### Navigate to project dir
+`cd joke-service`
+
 #### Run tests
 To run the service tests
 `py -m pytest`
