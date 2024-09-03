@@ -1,14 +1,10 @@
 TODO:
-    1. make sure all the event details are going through.
-        missing:
-            - account_id (forgot to include it in the db definition)
-            - ip_address (I wasn't consistent with its naming in all places)
-
     2. decouple queue_consumer a little bit, its being executed from consumer.py i don't like it
     3. use env vars and consts
     4. renaming crusade
     5. provide informative documentation wherever necessary
     6. install a normal formatter for fucks sake
+    7. db handler init does stupid stuff uncessasirly 
 ------------------------------
 
 BONUS (the order isn't random)
