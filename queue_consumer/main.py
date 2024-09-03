@@ -23,7 +23,7 @@ def main():
         queue_name=consts.RABBITMQ_JOKE_METADATA_QUEUE,
 
         # RabbitMQConsumer is also in charge of triggering the DB write process. 
-        # That's why he's getting the db_handler as a parameter. I chose dependency injection in this case.
+        # That's why it's getting the db_handler as a parameter. I chose dependency injection in this case.
         db_handler=db_handler 
     )
 

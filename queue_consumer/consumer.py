@@ -6,9 +6,12 @@ from db_handler import DatabaseHandler
 
 class RabbitMQConsumer:
     '''
-    RabbitMQ Consumer Class
+    RabbitMQConsumer Class
     In charge of everything related to RabbitMQ on the consumer end (connecting, consuming etc)
     It is also in charge of triggering DB insertion
+    This class is pretty generic:
+     - It can work with every RabbitMQ queue
+     - It can work with every db_handler that has the insert_log method, doesn't have to be postgres 
     '''
     def __init__(self, host: str, 
                        port: int, 
@@ -27,6 +30,7 @@ class RabbitMQConsumer:
         self.channel = None
 
     def connect(self, retries=5, delay=10):
+        # Usually I tend to adhere to the SRP (SOLID), but that would also do the trick for now
         '''
         Connects to RabbitMQ server
         :param retries: int - the number of connectivity retries
