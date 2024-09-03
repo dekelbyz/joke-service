@@ -1,25 +1,21 @@
 import pika
-import time
 import json
 import logging
-from models import SessionLocal, HttpLog
+import time
 from db_handler import DatabaseHandler
-# from init_db import initialize_db
-
-# Configure logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class RabbitMQConsumer:
-    def __init__(self, host, port, user, password, queue_name):
+    def __init__(self, host, port, user, password, queue_name, db_handler: DatabaseHandler):
         self.host = host
         self.port = port
         self.user = user
         self.password = password
         self.queue_name = queue_name
+        self.db_handler = db_handler
         self.connection = None
         self.channel = None
 
-    def connect(self, retries=5, delay=5):
+    def connect(self, retries=5, delay=10):
         for _ in range(retries):
             try:
                 credentials = pika.PlainCredentials(self.user, self.password)
@@ -36,7 +32,7 @@ class RabbitMQConsumer:
     def start_consuming(self):
         self.channel.queue_declare(queue=self.queue_name)
         self.channel.basic_consume(queue=self.queue_name, on_message_callback=self.callback, auto_ack=False)
-        logging.info("Waiting for messages. To exit press CTRL+C")
+        logging.info("Waiting for messages")
         try:
             self.channel.start_consuming()
         except KeyboardInterrupt:
@@ -47,8 +43,7 @@ class RabbitMQConsumer:
             message = json.loads(body)
             logging.info(f"Received message: {message}")
 
-            db_handler = DatabaseHandler()
-            db_handler.insert_log(message)
+            self.db_handler.insert_log(message)
 
             logging.info("Message inserted into PostgreSQL")
             ch.basic_ack(delivery_tag=method.delivery_tag)
@@ -62,34 +57,4 @@ class RabbitMQConsumer:
             self.channel.stop_consuming()
         if self.connection is not None:
             self.connection.close()
-
-# class DatabaseHandler:
-#     def __init__(self):
-#         self.db = SessionLocal()
-
-#     def insert_log(self, message):
-#         log_entry = HttpLog(
-#             timestamp=message['timestamp'],
-#             status_code=message['status_code'],
-#             client_ip=message.get('client_ip'),
-#             method=message.get('method'),
-#             account=message.get('account'),
-#             endpoint=message.get('endpoint')
-#         )
-#         self.db.add(log_entry)
-#         self.db.commit()
-#         self.db.close()
-
-# if __name__ == "__main__":
-#     initialize_db()
-
-#     rabbitmq_consumer = RabbitMQConsumer(
-#         host='rabbitmq',
-#         port=5672,
-#         user='user',
-#         password='password',
-#         queue_name='http_logs'
-#     )
-
-#     rabbitmq_consumer.connect()
-#     rabbitmq_consumer.start_consuming()
+        logging.info("RabbitMQ connection closed")
