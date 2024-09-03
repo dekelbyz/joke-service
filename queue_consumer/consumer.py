@@ -1,63 +1,95 @@
 import pika
 import time
 import json
+import logging
 from models import SessionLocal, HttpLog
-from init_db import initialize_db
+from db_handler import DatabaseHandler
+# from init_db import initialize_db
 
-# TODO: USE env vars, decouple logic
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-rabbitmq_host = 'rabbitmq'
-rabbitmq_port = 5672
-rabbitmq_user = 'user'
-rabbitmq_password = 'password'
+class RabbitMQConsumer:
+    def __init__(self, host, port, user, password, queue_name):
+        self.host = host
+        self.port = port
+        self.user = user
+        self.password = password
+        self.queue_name = queue_name
+        self.connection = None
+        self.channel = None
 
-def connect_to_rabbitmq(retries=5, delay=5):
-    for i in range(retries):
+    def connect(self, retries=5, delay=5):
+        for _ in range(retries):
+            try:
+                credentials = pika.PlainCredentials(self.user, self.password)
+                parameters = pika.ConnectionParameters(host=self.host, port=self.port, credentials=credentials)
+                self.connection = pika.BlockingConnection(parameters)
+                self.channel = self.connection.channel()
+                logging.info("Connected to RabbitMQ")
+                return
+            except Exception:
+                time.sleep(delay)
+        logging.critical("All attempts to connect to RabbitMQ failed.")
+        exit(1)
+
+    def start_consuming(self):
+        self.channel.queue_declare(queue=self.queue_name)
+        self.channel.basic_consume(queue=self.queue_name, on_message_callback=self.callback, auto_ack=False)
+        logging.info("Waiting for messages. To exit press CTRL+C")
         try:
-            credentials = pika.PlainCredentials(rabbitmq_user, rabbitmq_password)
-            parameters = pika.ConnectionParameters(host=rabbitmq_host, port=rabbitmq_port, credentials=credentials)
-            connection = pika.BlockingConnection(parameters)
-            print("Connected to RabbitMQ")
-            return connection
+            self.channel.start_consuming()
+        except KeyboardInterrupt:
+            self.stop_consuming()
+
+    def callback(self, ch, method, properties, body):
+        try:
+            message = json.loads(body)
+            logging.info(f"Received message: {message}")
+
+            db_handler = DatabaseHandler()
+            db_handler.insert_log(message)
+
+            logging.info("Message inserted into PostgreSQL")
+            ch.basic_ack(delivery_tag=method.delivery_tag)
         except Exception as e:
-            print(f"Failed to connect to RabbitMQ, attempt {i+1} of {retries}: {e}")
-            time.sleep(delay)
-    print("All attempts to connect to RabbitMQ failed.")
-    exit(1)
+            logging.error(f"Failed to insert message into PostgreSQL: {e}")
+            ch.basic_nack(delivery_tag=method.delivery_tag)
 
-def callback(ch, method, properties, body):
-    try:
-        message = json.loads(body)
-        print(f"Received message: {message}")
+    def stop_consuming(self):
+        logging.info("Stopping consumer...")
+        if self.channel is not None:
+            self.channel.stop_consuming()
+        if self.connection is not None:
+            self.connection.close()
 
-        db = SessionLocal()
-        log_entry = HttpLog(
-            timestamp=message['timestamp'],
-            status_code=message['status_code'],
-            client_ip=message.get('client_ip'),
-            method=message.get('method'),
-            endpoint=message.get('endpoint')
-        )
-        db.add(log_entry)
-        db.commit()
-        db.close()
+# class DatabaseHandler:
+#     def __init__(self):
+#         self.db = SessionLocal()
 
-        print("Message inserted into PostgreSQL")
-    except Exception as e:
-        print(f"Failed to insert message into PostgreSQL: {e}")
+#     def insert_log(self, message):
+#         log_entry = HttpLog(
+#             timestamp=message['timestamp'],
+#             status_code=message['status_code'],
+#             client_ip=message.get('client_ip'),
+#             method=message.get('method'),
+#             account=message.get('account'),
+#             endpoint=message.get('endpoint')
+#         )
+#         self.db.add(log_entry)
+#         self.db.commit()
+#         self.db.close()
 
-if __name__ == "__main__":
-    initialize_db()
-    rabbitmq_connection = connect_to_rabbitmq()
+# if __name__ == "__main__":
+#     initialize_db()
 
-    channel = rabbitmq_connection.channel()
-    channel.queue_declare(queue='http_logs')
+#     rabbitmq_consumer = RabbitMQConsumer(
+#         host='rabbitmq',
+#         port=5672,
+#         user='user',
+#         password='password',
+#         queue_name='http_logs'
+#     )
 
-    channel.basic_consume(
-        queue='http_logs',
-        on_message_callback=callback,
-        auto_ack=True
-    )
-
-    print("Waiting for messages. To exit press CTRL+C")
-    channel.start_consuming()
+#     rabbitmq_consumer.connect()
+#     rabbitmq_consumer.start_consuming()

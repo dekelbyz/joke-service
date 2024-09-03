@@ -13,7 +13,7 @@ COPY queue_consumer/ /app/queue_consumer/
 EXPOSE 8000
 
 # TODO: use env vars / build args
-CMD ["sh", "-c", "python queue_consumer/init_db.py && python queue_consumer/consumer.py"]
+CMD ["sh", "-c", "python queue_consumer/init_db.py && python queue_consumer/main.py"]
 
 
 
