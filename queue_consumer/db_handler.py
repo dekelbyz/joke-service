@@ -20,12 +20,13 @@ class DatabaseHandler:
         try:
             db = SessionLocal()
             log_entry = JokeMetadata(
-                timestamp=message['timestamp'],
-                status_code=message['status_code'],
+                timestamp=message.get('timestamp'),
+                status_code=message.get('status_code'),
                 client_ip=message.get('client_ip'),
                 method=message.get('method'),
                 account=message.get('account'),
-                endpoint=message.get('endpoint')
+                endpoint=message.get('endpoint'),
+                event_id=message.get('event_id')
             )
             db.add(log_entry)
             db.commit()

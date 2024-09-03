@@ -25,6 +25,7 @@ class JokeMetadata(Base):
     endpoint = Column(String(100), nullable=False)
     method = Column(String(10), nullable=False)
     status_code = Column(Integer, nullable=False)
+    event_id = Column(Integer, nullable=False)
 
 
 

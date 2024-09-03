@@ -1,4 +1,4 @@
-import pika
+import pika # type: ignore
 import json
 import logging
 import time
@@ -70,15 +70,18 @@ class RabbitMQConsumer:
         '''
         try:
             message = json.loads(body)
+            event_id = method.delivery_tag
+            message['event_id'] = event_id
+
             logging.info(f"Received message: {message}")
 
             self.db_handler.insert_log(message)
 
             logging.info("Message inserted into PostgreSQL")
-            ch.basic_ack(delivery_tag=method.delivery_tag)
+            ch.basic_ack(event_id)
         except Exception as e:
             logging.error(f"Failed to insert message into PostgreSQL: {e}")
-            ch.basic_nack(delivery_tag=method.delivery_tag)
+            ch.basic_nack(event_id)
 
     def stop_consuming(self):
         logging.info("Stopping consumer...")
