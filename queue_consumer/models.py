@@ -5,7 +5,6 @@ import consts
 import os
 
 
-# todo: create consts.py to store env vars & default values
 DATABASE_URL = f"postgresql://{consts.POSTGRES_USER}:{consts.POSTGRES_PASSWORD}@{consts.POSTGRES_HOST}/{consts.POSTGRES_DB}"
 
 engine = create_engine(DATABASE_URL)
