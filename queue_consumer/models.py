@@ -16,9 +16,12 @@ class HttpLog(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     timestamp = Column(DateTime, nullable=False)
+    account = Column(String(60), nullable=False)
+    client_ip = Column(String(45), nullable=False)
+    endpoint = Column(String(100), nullable=False)
+    method = Column(String(10), nullable=False)
     status_code = Column(Integer, nullable=False)
-    client_ip = Column(String(45), nullable=True)
-    method = Column(String(10), nullable=True)
-    endpoint = Column(Text, nullable=True)
+
+
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

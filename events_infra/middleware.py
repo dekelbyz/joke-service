@@ -14,11 +14,10 @@ class LoggingMiddleware(BaseHTTPMiddleware):
         headers = dict(request.headers)
         response = await call_next(request)
 
-        # TODO: align names 
         send_to_rabbitmq({
             'timestamp': datetime.utcnow().isoformat(),
-            'account': 'UNAUTHORIZED' if headers.get('authorization') not in accounts else headers.get('authorization'),
-            'ip_address': request.client.host,
+            'account': 'UNAUTHORIZED' if headers.get('authorization', 'wtf') not in accounts else headers.get('authorization', 'UNAUTHORIZED'),
+            'client_ip': request.client.host,
             'endpoint': request.url.path,
             'method': request.method,
             'status_code':  int(response.status_code),

@@ -33,18 +33,19 @@ def _initialize_db():
     Base.metadata.create_all(bind=engine)
     print("Database initialized successfully.")
 
-def save_event_details_to_db(event_details):
-    db = SessionLocal()
-    log_entry = HttpLog(
-        timestamp=event_details['timestamp'],
-        status_code=event_details['status_code'],
-        client_ip=event_details.get('client_ip'),
-        method=event_details.get('method'),
-        endpoint=event_details.get('endpoint')
-    )
-    db.add(log_entry)
-    db.commit()
-    db.close()
+# def save_event_details_to_db(event_details): 
+#     db = SessionLocal()
+#     log_entry = HttpLog(
+#         timestamp=event_details['timestamp'],
+#         status_code=event_details['status_code'],
+#         client_ip=event_details.get('client_ip'),
+#         method=event_details.get('method'),
+#         account=event_details.get('account'),
+#         endpoint=event_details.get('endpoint')
+#     )
+#     db.add(log_entry)
+#     db.commit()
+#     db.close()
 
-    print("Message inserted into PostgreSQL")
+#     print("Message inserted into PostgreSQL")
 

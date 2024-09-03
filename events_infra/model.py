@@ -15,7 +15,7 @@ class HTTPMethod(Enum):
 class EventDetails:
     timetsamp: date
     account: str
-    ip_address: str
+    client_ip: str
     endpoint: str
     method: HTTPMethod
     status_code: int
