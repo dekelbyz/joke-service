@@ -9,11 +9,14 @@ class DatabaseHandler:
         self._initialize_db()
 
     def _initialize_db(self):
+        '''Creates DB tables if not already exist'''
+
         logging.info("Creating the database tables if they don't exist...")
         Base.metadata.create_all(bind=engine)
         logging.info("Database initialized successfully.")
 
     def insert_log(self, message):
+        '''Saves the metadata of every request joke_service receives '''
         try:
             db = SessionLocal()
             log_entry = JokeMetadata(

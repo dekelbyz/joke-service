@@ -12,6 +12,12 @@ engine = create_engine(DATABASE_URL)
 Base = declarative_base()
 
 class JokeMetadata(Base):
+    '''
+    SQLAlchemy based class 
+    Defines and represents the db columns and their settings the way it's stored inside the DB
+    '''
+
+    # not the best name I could come up with. I know.
     __tablename__ = 'joke_metadata'
 
     id = Column(Integer, primary_key=True, autoincrement=True)

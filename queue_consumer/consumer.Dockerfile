@@ -10,7 +10,6 @@ COPY accounts.json /app/
 
 COPY queue_consumer/ /app/queue_consumer/
 
-
 CMD ["sh", "-c", "python queue_consumer/main.py"]
 
 
