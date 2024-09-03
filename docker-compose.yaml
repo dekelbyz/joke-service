@@ -31,8 +31,6 @@ services:
     build:
       context: .
       dockerfile: queue_consumer/consumer.Dockerfile
-    ports:
-      - "7000:7000"
     depends_on:
       - rabbitmq
       - postgres
@@ -41,6 +39,11 @@ services:
       POSTGRES_USER: postgres_user
       POSTGRES_PASSWORD: postgres_password
       POSTGRES_DB: joke_db
+      RABBITMQ_HOST: 'rabbitmq'
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: 'user'
+      RABBITMQ_PASSWORD: 'password'
+      RABBITMQ_JOKE_METADATA_QUEUE: 'joke_metadata_queue'
 
   postgres:
     image: postgres:13
