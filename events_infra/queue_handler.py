@@ -9,11 +9,11 @@ def send_to_rabbitmq(message: EventDetails):
     connection = pika.BlockingConnection(pika.ConnectionParameters(host='rabbitmq', credentials=credentials))
     channel = connection.channel()
     
-    channel.queue_declare(queue='http_logs')
+    channel.queue_declare(queue='joke_metadata_queue')
     
     channel.basic_publish(
         exchange='',
-        routing_key='http_logs',
+        routing_key='joke_metadata_queue',
         body=json.dumps(message)
     )
     

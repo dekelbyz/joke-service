@@ -1,18 +1,19 @@
 from sqlalchemy import create_engine, Column, Integer, String, Text, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+import consts
 import os
 
 
 # todo: create consts.py to store env vars & default values
-DATABASE_URL = f"postgresql://{os.getenv('POSTGRES_USER')}:{os.getenv('POSTGRES_PASSWORD')}@{os.getenv('POSTGRES_HOST')}/{os.getenv('POSTGRES_DB')}"
+DATABASE_URL = f"postgresql://{consts.POSTGRES_USER}:{consts.POSTGRES_PASSWORD}@{consts.POSTGRES_HOST}/{consts.POSTGRES_DB}"
 
 engine = create_engine(DATABASE_URL)
 
 Base = declarative_base()
 
-class HttpLog(Base):
-    __tablename__ = 'http_logs'
+class JokeMetadata(Base):
+    __tablename__ = 'joke_metadata'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     timestamp = Column(DateTime, nullable=False)
