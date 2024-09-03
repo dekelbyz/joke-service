@@ -18,8 +18,8 @@ The root README.md file explains exactly how to do so
 
 #### Future steps:
 
-> More Error handling
-> Unit/integration testing
-> Pydantic implementation 
-> Logger configuration improvement
+- More Error handling
+- Unit/integration testing
+- Pydantic implementation 
+- Logger configuration improvement
 
