@@ -22,10 +22,11 @@ services:
       - rabbitmq
       - postgres
     environment:
-      POSTGRES_HOST: postgres
-      POSTGRES_USER: postgres_user
-      POSTGRES_PASSWORD: postgres_password
-      POSTGRES_DB: http_call_records
+      RABBITMQ_HOST: 'rabbitmq'
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: 'user'
+      RABBITMQ_PASSWORD: 'password'
+      RABBITMQ_JOKE_METADATA_QUEUE: 'joke_metadata_queue'
 
   queue_consumer:
     build:
