@@ -8,7 +8,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY accounts.json /app/
 
-COPY events_infra/ /app/events_infra/ 
+COPY queue_publisher_middleware/ /app/queue_publisher_middleware/ 
 # this is an alternative to an actual shared library hosted in some repository (e.g. PYPI) 
 
 COPY joke_service/ /app/joke_service/

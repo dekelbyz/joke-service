@@ -1,1 +1,0 @@
-# in real life this is supposed to be a shared library at some artifactory/repository etc.

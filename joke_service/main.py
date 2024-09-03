@@ -2,7 +2,7 @@ import requests
 from fastapi import FastAPI
 from joke_service.auth import Auth
 from joke_service.joke import Joke
-from events_infra.middleware import LoggingMiddleware
+from queue_publisher_middleware.middleware import LoggingMiddleware
 app = FastAPI()
 
 @app.get("/joke")

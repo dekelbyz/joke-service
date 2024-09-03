@@ -13,5 +13,6 @@ typing_extensions==4.4.0
 urllib3==1.26.12
 uvicorn==0.18.3
 
-# events infra dependencies
+# queue_publisher_middleware dependencies
 pika==1.3.2
+starlette==0.20.4
