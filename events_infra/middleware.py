@@ -16,7 +16,7 @@ class LoggingMiddleware(BaseHTTPMiddleware):
 
         send_to_rabbitmq({
             'timestamp': datetime.utcnow().isoformat(),
-            'account': 'UNAUTHORIZED' if headers.get('authorization', 'wtf') not in accounts else headers.get('authorization', 'UNAUTHORIZED'),
+            'account': 'UNAUTHORIZED' if headers.get('authorization', 'NaN') not in accounts else headers.get('authorization', 'UNAUTHORIZED'),
             'client_ip': request.client.host,
             'endpoint': request.url.path,
             'method': request.method,
