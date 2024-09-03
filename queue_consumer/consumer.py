@@ -4,6 +4,8 @@ import logging
 import time
 from db_handler import DatabaseHandler
 
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+
 class RabbitMQConsumer:
     '''
     RabbitMQConsumer Class
