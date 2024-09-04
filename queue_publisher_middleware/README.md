@@ -5,12 +5,12 @@ This service is a FastAPI middleware that extract specific metadata for every in
   it also extracts response data (status code)
   
   # 
- A best practice would be to use it as a 3rd party library, stored at some repostiory
+ A better practice would be to use it as a 3rd party library, stored at some repository
  I chose to keep it simple for now
   
 ## Install & run
 
-This service doesn't run as a standalone, for it's only an extention to a FastAPI object
+This service doesn't run as a standalone, for it's only an extension to a FastAPI object
 Since it only runs
 
 
