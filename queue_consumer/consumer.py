@@ -37,10 +37,8 @@ class RabbitMQConsumer:
         Connects to RabbitMQ server
         :param retries: int - the number of connectivity retries
         :param delay: int -the number of seconds you want to wait between connection retry
-
-        In a natural way, the rabbitMQ container takes longer to be ready, so the first few attempts 
-        Will probably fail. Don't freak out
         '''
+        
         for _ in range(retries):
             try:
                 credentials = pika.PlainCredentials(self.user, self.password)
