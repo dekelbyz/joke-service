@@ -2,12 +2,22 @@ version: '3.8'
 
 services:
   rabbitmq:
-    image: rabbitmq:3-management
+    build:
+      context: .
+      dockerfile: rabbitmq.Dockerfile
     ports:
       - "15672:15672"
     environment:
       RABBITMQ_DEFAULT_USER: user
       RABBITMQ_DEFAULT_PASS: password
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:15672"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
 
@@ -18,8 +28,10 @@ services:
     ports:
       - "8000:8000"
     depends_on:
-      - rabbitmq
-      - postgres
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
     environment:
       RABBITMQ_HOST: 'rabbitmq'
       RABBITMQ_PORT: 5672
@@ -32,8 +44,10 @@ services:
       context: .
       dockerfile: queue_consumer/consumer.Dockerfile
     depends_on:
-      - rabbitmq
-      - postgres
+      rabbitmq:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
     environment:
       POSTGRES_HOST: postgres
       POSTGRES_USER: postgres_user
@@ -53,6 +67,13 @@ services:
       POSTGRES_DB: joke_db
     ports:
       - "5432:5432"
+    healthcheck:
+      test: pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
