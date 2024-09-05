@@ -1,5 +1,0 @@
-TODO:
-    1. fix db recursive freakout
-    2. fix depends on! try to find readiness probe 
-    3. use singleton technique for consumer as well
-    4. add documentations to middleware
