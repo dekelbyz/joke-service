@@ -1,27 +1,34 @@
-import pika # type: ignore
+import pika  # type: ignore
 import json
 import logging
 import time
 from db_handler import DatabaseHandler
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
+)
+
 
 class RabbitMQConsumer:
-    '''
+    """
     RabbitMQConsumer Class
     In charge of everything related to RabbitMQ on the consumer end (connecting, consuming etc)
     It is also in charge of triggering DB insertion
     This class is pretty generic:
      - It can work with every RabbitMQ queue
-     - It can work with every db_handler that has the insert_log method, doesn't have to be postgres 
-    '''
-    def __init__(self, host: str, 
-                       port: int, 
-                       user: str, 
-                       password: str,
-                       queue_name: str,
-                       db_handler: DatabaseHandler):
-        ''' RabbitMQConsumer constructor '''
+     - It can work with every db_handler that has the insert_log method, doesn't have to be postgres
+    """
+
+    def __init__(
+        self,
+        host: str,
+        port: int,
+        user: str,
+        password: str,
+        queue_name: str,
+        db_handler: DatabaseHandler,
+    ):
+        """RabbitMQConsumer constructor"""
         self.host = host
         self.port = port
         self.user = user
@@ -33,16 +40,18 @@ class RabbitMQConsumer:
 
     def connect(self, retries=5, delay=10):
         # Usually I tend to adhere to the SRP (SOLID), but that would also do the trick for now
-        '''
+        """
         Connects to RabbitMQ server
         :param retries: int - the number of connectivity retries
         :param delay: int -the number of seconds you want to wait between connection retry
-        '''
-        
+        """
+
         for _ in range(retries):
             try:
                 credentials = pika.PlainCredentials(self.user, self.password)
-                parameters = pika.ConnectionParameters(host=self.host, port=self.port, credentials=credentials)
+                parameters = pika.ConnectionParameters(
+                    host=self.host, port=self.port, credentials=credentials
+                )
                 self.connection = pika.BlockingConnection(parameters)
                 self.channel = self.connection.channel()
                 logging.info("Connected to RabbitMQ")
@@ -53,8 +62,12 @@ class RabbitMQConsumer:
         exit(1)
 
     def start_consuming(self):
-        self.channel.queue_declare(queue=self.queue_name) # creates the queue in case missing
-        self.channel.basic_consume(queue=self.queue_name, on_message_callback=self.consume, auto_ack=False) 
+        self.channel.queue_declare(
+            queue=self.queue_name
+        )  # creates the queue in case missing
+        self.channel.basic_consume(
+            queue=self.queue_name, on_message_callback=self.consume, auto_ack=False
+        )
         logging.info("Waiting for messages")
         try:
             self.channel.start_consuming()
@@ -62,14 +75,14 @@ class RabbitMQConsumer:
             self.stop_consuming()
 
     def consume(self, ch, method, properties, body):
-        '''
+        """
         Callback method for consuming messages
-        This function also triggers the DB writing 
-        '''
+        This function also triggers the DB writing
+        """
         try:
             message = json.loads(body)
             event_id = method.delivery_tag
-            message['event_id'] = event_id
+            message["event_id"] = event_id
 
             logging.info(f"Received message: {message}")
 

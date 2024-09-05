@@ -9,14 +9,15 @@ engine = create_engine(DATABASE_URL)
 
 Base = declarative_base()
 
+
 class JokeMetadata(Base):
-    '''
-    SQLAlchemy based class 
+    """
+    SQLAlchemy based class
     Defines and represents the db columns and their settings the way it's stored inside the DB
-    '''
+    """
 
     # not the best name I could come up with. I know.
-    __tablename__ = 'joke_metadata'
+    __tablename__ = "joke_metadata"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     timestamp = Column(DateTime, nullable=False)
@@ -26,7 +27,6 @@ class JokeMetadata(Base):
     method = Column(String(10), nullable=False)
     status_code = Column(Integer, nullable=False)
     event_id = Column(Integer, nullable=False)
-
 
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
